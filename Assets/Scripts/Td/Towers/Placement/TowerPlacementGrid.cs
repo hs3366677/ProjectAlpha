@@ -2,6 +2,7 @@
 using Core.Utilities;
 using TowerDefense.UI.HUD;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace TowerDefense.Towers.Placement
 {
@@ -27,10 +28,12 @@ namespace TowerDefense.Towers.Placement
 		/// </summary>
 		public IntVector2 dimensions;
 
-		/// <summary>
-		/// Size of the edge of a cell
-		/// </summary>
-		[Tooltip("The size of the edge of one grid cell for this area. Should match the physical grid size of towers")]
+	    public TileBase tileBase;
+
+        /// <summary>
+        /// Size of the edge of a cell
+        /// </summary>
+        [Tooltip("The size of the edge of one grid cell for this area. Should match the physical grid size of towers")]
 		public float gridSize = 1;
 
 		/// <summary>
@@ -48,6 +51,7 @@ namespace TowerDefense.Towers.Placement
 		/// </summary>
 		PlacementTile[,] m_Tiles;
 
+	    private Tilemap _tileMap;
 		/// <summary>
 		/// Converts a location in world space into local grid coordinates.
 		/// </summary>
@@ -214,8 +218,15 @@ namespace TowerDefense.Towers.Placement
 			// Precalculate inverted grid size, to save a division every time we translate coords
 			m_InvGridSize = 1 / gridSize;
 
-			SetUpGrid();
+		    _tileMap = GetComponentInChildren<Tilemap>();
+
 		}
+
+	    protected void Start()
+	    {
+	        SetUpTileMap();
+	        SetUpGridOverride();
+        }
 
 		/// <summary>
 		/// Set collider's size and center
@@ -233,6 +244,7 @@ namespace TowerDefense.Towers.Placement
 		/// <summary>
 		/// Instantiates Tile Objects to visualise the grid and sets up the <see cref="m_AvailableCells" />
 		/// </summary>
+		[Obsolete]
 		protected void SetUpGrid()
 		{		
 			PlacementTile tileToUse;
@@ -269,6 +281,43 @@ namespace TowerDefense.Towers.Placement
 			}
 		}
 
+	    protected void SetUpGridOverride()
+	    {
+	        PlacementTile tileToUse;
+#if UNITY_STANDALONE
+	        tileToUse = placementTilePrefab;
+#else
+			tileToUse = placementTilePrefabMobile;
+#endif
+	        if (tileToUse != null)
+	        {
+	            // Create a container that will hold the cells.
+	            var tilesParent = new GameObject("Container");
+	            tilesParent.transform.parent = transform;
+	            tilesParent.transform.localPosition = Vector3.zero;
+	            tilesParent.transform.localRotation = Quaternion.identity;
+	            //m_Tiles = new PlacementTile[dimensions.x, dimensions.y];
+	            PlacementTile newTile = Instantiate(tileToUse);
+	            SpriteRenderer tileSpr = newTile.GetComponent<SpriteRenderer>();
+	            tileSpr.size = new Vector2(dimensions.x * 2, dimensions.y * 2);
+	        }
+	    }
+
+	    private Vector3Int tmpVec3 = Vector3Int.zero;
+	    protected void SetUpTileMap()
+	    {
+
+            for (int i = 0; i < dimensions.x; i++)
+	        {
+	            for (int j = 0; j < dimensions.y; j++)
+	            {
+	                tmpVec3.x = i;
+	                tmpVec3.y = j;
+	                _tileMap.SetTile(tmpVec3, tileBase);
+                }
+            }
+
+	    }
 #if UNITY_EDITOR
 		/// <summary>
 		/// On editor/inspector validation, make sure we size our collider correctly.
