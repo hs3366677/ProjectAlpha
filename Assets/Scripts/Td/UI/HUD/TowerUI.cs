@@ -72,7 +72,7 @@ namespace TowerDefense.UI.HUD
 			m_Tower = towerToShow;
 			AdjustPosition();
 
-			m_Canvas.enabled = true;
+			//m_Canvas.enabled = true;
 
 			int sellValue = m_Tower.GetSellLevel();
 			if (sellButton != null)
@@ -109,7 +109,7 @@ namespace TowerDefense.UI.HUD
 			{
 				GameUI.instance.HideRadiusVisualizer();
 			}
-			m_Canvas.enabled = false;
+			//m_Canvas.enabled = false;
 			LevelManager.instance.currency.currencyChanged -= OnCurrencyChanged;
 		}
 
@@ -159,7 +159,7 @@ namespace TowerDefense.UI.HUD
 		protected virtual void Start()
 		{
 			m_GameCamera = Camera.main;
-			m_Canvas.enabled = false;
+			//m_Canvas.enabled = true;
 			if (GameUI.instanceExists)
 			{
 				GameUI.instance.selectionChanged += OnUISelectionChanged;

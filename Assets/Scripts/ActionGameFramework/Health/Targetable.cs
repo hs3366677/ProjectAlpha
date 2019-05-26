@@ -11,6 +11,7 @@ namespace ActionGameFramework.Health
 		/// <summary>
 		/// The transform that will be targeted
 		/// </summary>
+		[HideInInspector]
 		public Transform targetTransform;
 
 		/// <summary>

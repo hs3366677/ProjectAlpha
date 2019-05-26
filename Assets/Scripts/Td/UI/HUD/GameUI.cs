@@ -200,6 +200,7 @@ namespace TowerDefense.UI.HUD
 				throw new InvalidOperationException("Can't cancel out of ghost placement when not in the building state.");
 			}
 
+
 			if (buildInfoUI != null)
 			{
 				buildInfoUI.Hide();

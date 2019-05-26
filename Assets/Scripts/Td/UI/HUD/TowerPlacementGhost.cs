@@ -36,14 +36,9 @@ namespace TowerDefense.UI.HUD
 		/// <summary>
 		/// The two materials used to represent valid and invalid placement, respectively
 		/// </summary>
-		public Material material;
+		public Color validColor;
 		
-		public Material invalidPositionMaterial;
-
-		/// <summary>
-		/// The list of attached mesh renderers 
-		/// </summary>
-		protected MeshRenderer[] m_MeshRenderers;
+		public Color invalidColor;
 
 		/// <summary>
 		/// Movement velocity for smooth damping
@@ -65,13 +60,15 @@ namespace TowerDefense.UI.HUD
 		/// </summary>
 		public Collider ghostCollider { get; private set; }
 
+	    private SpriteRenderer m_SpriteRenderer;
+
 		/// <summary>
 		/// Initialize this ghost
 		/// </summary>
 		/// <param name="tower">The tower controller we're a ghost of</param>
 		public virtual void Initialize(Tower tower)
 		{
-			m_MeshRenderers = GetComponentsInChildren<MeshRenderer>();
+		    m_SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
 			controller = tower;
 			if (GameUI.instanceExists)
 			{
@@ -123,10 +120,7 @@ namespace TowerDefense.UI.HUD
 			}
 			
 			transform.rotation = rotation;
-			foreach (MeshRenderer meshRenderer in m_MeshRenderers)
-			{
-				meshRenderer.sharedMaterial = validLocation ? material : invalidPositionMaterial;
-			}
+	        m_SpriteRenderer.color = validLocation ? validColor : invalidColor;
 		}
 
 

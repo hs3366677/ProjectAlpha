@@ -224,8 +224,8 @@ namespace TowerDefense.Towers.Placement
 
 	    protected void Start()
 	    {
-	        SetUpTileMap();
-	        SetUpGridOverride();
+            SetUpTileMap();
+            //SetUpGridOverride();
         }
 
 		/// <summary>

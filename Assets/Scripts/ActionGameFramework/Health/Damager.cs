@@ -64,7 +64,7 @@ namespace ActionGameFramework.Health
 		/// <summary>
 		/// Damagable will tell damager that it has successful hurt the damagable
 		/// </summary>
-		public void HasDamaged(Vector3 point, IAlignmentProvider otherAlignment)
+		public void HasDamaged(Vector2 point, IAlignmentProvider otherAlignment)
 		{
 			if (hasDamaged != null)
 			{
